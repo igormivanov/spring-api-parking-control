@@ -17,6 +17,7 @@ public interface ParkingSpotService {
 
 	boolean existsByApartmentAndBlock(String apartment, String block);
 
+	// List<ParkingSpotModel> findAll()
 	List<ParkingSpotModel> findAll();
 
 	Optional<ParkingSpotModel> findById(UUID id);
