@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.parkingcontrol.dtos.ParkingSpotDto;
 import com.api.parkingcontrol.models.ParkingSpotModel;
+import com.api.parkingcontrol.models.UserModel;
 import com.api.parkingcontrol.services.ParkingSpotService;
 
 import jakarta.validation.Valid;
@@ -44,6 +46,7 @@ public class ParkingSpotController {
 	*/
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_USER')")
 	public ResponseEntity<Object> saveParkingSpot(@RequestBody @Valid ParkingSpotDto parkingSPotDto){
 		
 		if(parkingSpotService.existsByLicensePlateCar(parkingSPotDto.getLicensePlateCar())) {
@@ -78,6 +81,7 @@ public class ParkingSpotController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<Object> deleteParkingSpot(@PathVariable(value = "id") UUID id){
 		Optional<ParkingSpotModel> parkingSpotModelOptional = parkingSpotService.findById(id);
 		if(!parkingSpotModelOptional.isPresent()) {
@@ -89,6 +93,7 @@ public class ParkingSpotController {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<Object> updateParkingSpot(@PathVariable(value = "id") UUID id, 
 			@RequestBody @Valid ParkingSpotDto parkingSpotDto){
 		
@@ -116,7 +121,10 @@ public class ParkingSpotController {
 		parkingSpotModel.setApartment(parkingSpotDto.getApartment());
 		parkingSpotModel.setBlock(parkingSpotDto.getBlock());
 		*/
-		
 	}
 	
+	@PostMapping("/new")
+	public String addNewUser(@RequestBody UserModel userModel) {
+		return parkingSpotService.addUser(userModel);
+	}
 }

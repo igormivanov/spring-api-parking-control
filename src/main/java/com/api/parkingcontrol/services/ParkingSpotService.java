@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.api.parkingcontrol.models.ParkingSpotModel;
+import com.api.parkingcontrol.models.UserModel;
 
 
 public interface ParkingSpotService {
@@ -23,4 +24,6 @@ public interface ParkingSpotService {
 	Optional<ParkingSpotModel> findById(UUID id);
 
 	void delete(ParkingSpotModel parkingSpotModel);
+	
+	String addUser(UserModel userModel);
 }
